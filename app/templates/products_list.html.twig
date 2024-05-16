@@ -39,8 +39,8 @@
             </th>
             <th>
                 updatedAt
-                <a href="{{ path('app_product_productslist', { page: productListView.previousPageNumber, sortBy: productListView.updatedAtFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
-                <a href="{{ path('app_product_productslist', { page: productListView.previousPageNumber, sortBy: productListView.updatedAtFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.updatedAtFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.updatedAtFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
             </th>
         </tr>
         {% for product in productListView.products %}
