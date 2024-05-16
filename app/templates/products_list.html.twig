@@ -1,0 +1,69 @@
+{# @var productListView \App\View\Product\List\ProductListView #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Products list</h1>
+
+    <table>
+        <tr>
+            <th>
+                id
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.idFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.idFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                code
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.codeFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.codeFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                name
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.nameFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.nameFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                type
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.typeFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.typeFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                price
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.priceFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.priceFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                createdAt
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.createdAtFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { sortBy: productListView.createdAtFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+            <th>
+                updatedAt
+                <a href="{{ path('app_product_productslist', { page: productListView.previousPageNumber, sortBy: productListView.updatedAtFieldName, sortDirection: productListView.askDirection }) }}">Sort ask</a>
+                <a href="{{ path('app_product_productslist', { page: productListView.previousPageNumber, sortBy: productListView.updatedAtFieldName, sortDirection: productListView.descDirection }) }}">Sort desc</a>
+            </th>
+        </tr>
+        {% for product in productListView.products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.code }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.typeString }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.createdAt|date('Y-m-d H:i:s') }}</td>
+                <td>{{ product.updatedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    <p>
+        {% if not productListView.isFirstPage %}
+            <a href="{{ path('app_product_productslist', { page: productListView.previousPageNumber, sortBy: productListView.currentFieldName, sortDirection: productListView.descDirection }) }}">Previous</a>
+        {% endif %}
+
+        {% if not productListView.isLastPage %}
+            <a href="{{ path('app_product_productslist', { page: productListView.nextPageNumber, sortBy: productListView.currentFieldName, sortDirection: productListView.currentDirection }) }}">Next</a>
+        {% endif %}
+    </p>
+{% endblock %}

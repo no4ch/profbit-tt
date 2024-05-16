@@ -37,7 +37,7 @@ class ProductRepository extends ServiceEntityRepository
      */
     public function saveMultiple(
         array $products
-    ) {
+    ): void {
         $entityManager = $this->getEntityManager();
 
         foreach ($products as $product) {
@@ -45,5 +45,32 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         $entityManager->flush();
+    }
+
+    public function getProductsCount(): int
+    {
+        return (int) $this->createQueryBuilder('product')
+            ->select('COUNT(product)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function getProducts(
+        int $offset = 0,
+        int $limit = 100,
+        string $orderBy = 'createdAt',
+        string $orderDirection = 'DESC'
+    ): array {
+        return $this->findBy(
+            [],
+            [
+                $orderBy => $orderDirection,
+            ],
+            $limit,
+            $offset
+        );
     }
 }

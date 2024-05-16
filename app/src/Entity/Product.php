@@ -8,6 +8,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 class Product
 {
     #[ORM\Id]
@@ -27,6 +29,12 @@ class Product
     #[ORM\Column]
     private float $price;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private \DateTimeImmutable $updatedAt;
+
     /**
      * @param string $code
      * @param string $name
@@ -43,6 +51,11 @@ class Product
         $this->name = $name;
         $this->type = $type->value;
         $this->price = $price;
+
+        $now = new \DateTimeImmutable();
+
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
     }
 
     public function getId(): ?int
@@ -75,6 +88,11 @@ class Product
         return ProductTypeEnum::from($this->type);
     }
 
+    public function getTypeString(): string
+    {
+        return $this->getType()->value;
+    }
+
     public function setType(ProductTypeEnum $type): void
     {
         $this->type = $type->value;
@@ -88,5 +106,27 @@ class Product
     public function setPrice(float $price): void
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
