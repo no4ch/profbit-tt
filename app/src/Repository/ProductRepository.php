@@ -30,4 +30,20 @@ class ProductRepository extends ServiceEntityRepository
             $price,
         );
     }
+
+    /**
+     * @param Product[] $products
+     * @return void
+     */
+    public function saveMultiple(
+        array $products
+    ) {
+        $entityManager = $this->getEntityManager();
+
+        foreach ($products as $product) {
+            $entityManager->persist($product);
+        }
+
+        $entityManager->flush();
+    }
 }
