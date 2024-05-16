@@ -2,20 +2,31 @@ version: '3.9'
 
 services:
     app:
-        container_name: app
+        container_name: profbit-tt-app
         build:
             context: ./services/app
             dockerfile: Dockerfile
+        depends_on:
+            - database
         volumes:
             - ../app:/var/www/html
         tty: true
 
     web:
+        container_name: profbit-tt-web
         image: nginx:1.25-alpine
         ports:
             - "80:80"
         depends_on:
             - app
+            - database
         volumes:
             - ./services/web/conf.d/default.conf:/etc/nginx/conf.d/default.conf
             - ../app/public/media:/var/www/html/public/media
+
+    database:
+        container_name: profbit-tt-database
+        image: mariadb:11.4.1-rc
+        restart: always
+        environment:
+            MARIADB_ROOT_PASSWORD: root
